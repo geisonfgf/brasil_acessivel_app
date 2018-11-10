@@ -10,7 +10,7 @@ var routes = <String, WidgetBuilder>{
 void main() {
   runApp(
     MaterialApp(
-      theme: ThemeData(primaryColor: Colors.red, accentColor: Colors.yellowAccent),
+      theme: ThemeData(primaryColor: Colors.red, accentColor: Colors.redAccent),
       debugShowCheckedModeBanner: false,
       home: Home(),
       routes: routes
