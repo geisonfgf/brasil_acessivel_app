@@ -25,6 +25,14 @@ FLUTTER_EXPORT
 - (void)handleStatusBarTouches:(UIEvent*)event;
 
 /**
+ Registers a callback that will be invoked when the Flutter view has been rendered.
+ The callback will be fired only once.
+
+ Replaces an existing callback. Use a `nil` callback to unregister the existing one.
+ */
+- (void)setFlutterViewDidRenderCallback:(void (^)(void))callback;
+
+/**
  Returns the file name for the given asset.
  The returned file name can be used to access the asset in the application's main bundle.
 
@@ -46,10 +54,28 @@ FLUTTER_EXPORT
 
 /**
  Sets the first route that the Flutter app shows. The default is "/".
+ This method will guarnatee that the initial route is delivered, even if the
+ Flutter window hasn't been created yet when called. It cannot be used to update
+ the current route being shown in a visible FlutterViewController (see pushRoute
+ and popRoute).
 
  - Parameter route: The name of the first route to show.
  */
 - (void)setInitialRoute:(NSString*)route;
+
+/**
+ Instructs the Flutter Navigator (if any) to go back.
+ */
+- (void)popRoute;
+
+/**
+ Instructs the Flutter Navigator (if any) to push a route on to the navigation
+ stack.  The setInitialRoute method should be prefered if this is called before the
+ FlutterViewController has come into view.
+
+ - Parameter route: The name of the route to push to the navigation stack.
+ */
+- (void)pushRoute:(NSString*)route;
 
 - (id<FlutterPluginRegistry>)pluginRegistry;
 
@@ -66,6 +92,15 @@ FLUTTER_EXPORT
  `Info.plist` file.
  */
 @property(strong, nonatomic) UIView* splashScreenView;
+
+/**
+ * Controls whether the created view will be opaque or not.
+ *
+ * Default is `YES`.  Note that setting this to `NO` may negatively impact performance
+ * when using hardware acceleration, and toggling this will trigger a re-layout of the
+ * view.
+ */
+@property(nonatomic, getter=isViewOpaque) BOOL viewOpaque;
 
 @end
 
