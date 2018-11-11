@@ -1,3 +1,4 @@
+import 'package:brasil_acessivel/services/location_service.dart';
 import 'package:flutter/foundation.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_map/flutter_map.dart';
@@ -10,11 +11,19 @@ class Home extends StatefulWidget {
 
 class _HomePageState extends State<Home> {
 
-  final _brazilLocation = LatLng(-22.34, -48.05);
+  var _initialMapPosition = LocationService.brazilLocation;
 
   @override
   void initState() {
     super.initState();
+    LocationService.getGPSPosition().then((position) {
+      debugPrint(">>>>Position: $position");
+      if(position == null) { return; }
+
+      this.setState((){
+        _initialMapPosition = LatLng(position.latitude, position.longitude);
+      });
+    });
   }
 
   @override
@@ -41,7 +50,7 @@ class _HomePageState extends State<Home> {
       ),
       body: FlutterMap(
         options: MapOptions(
-          center: _brazilLocation,
+          center: _initialMapPosition,
           zoom: 4.0,
         ),
         layers: [

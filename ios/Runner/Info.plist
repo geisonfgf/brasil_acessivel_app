@@ -26,6 +26,10 @@
 	<string>LaunchScreen</string>
 	<key>UIMainStoryboardFile</key>
 	<string>Main</string>
+	<key>NSLocationWhenInUseUsageDescription</key>
+	<string>Permita o uso de sua localização para utilizar o mapa</string>
+	<key>NSLocationAlwaysAndWhenInUseUsageDescription</key>
+	<string>Permita o uso de sua localização para utilizar o mapa em background</string>
 	<key>UISupportedInterfaceOrientations</key>
 	<array>
 		<string>UIInterfaceOrientationPortrait</string>
