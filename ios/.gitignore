@@ -9,6 +9,7 @@ profile
 
 DerivedData/
 build/
+ios/Runner.xcworkspace/xcshareddata/
 GeneratedPluginRegistrant.h
 GeneratedPluginRegistrant.m
 
@@ -40,6 +41,7 @@ Icon?
 /Flutter/Flutter.framework
 /Flutter/Generated.xcconfig
 /ServiceDefinitions.json
+flutter_01.log
 
 Pods/
 .symlinks/
