@@ -17,7 +17,6 @@ class _HomePageState extends State<Home> {
   void initState() {
     super.initState();
     LocationService.getGPSPosition().then((position) {
-      debugPrint(">>>>Position: $position");
       if(position == null) { return; }
 
       this.setState((){

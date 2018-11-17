@@ -2,7 +2,6 @@
 FLUTTER_ROOT=/Applications/flutter
 FLUTTER_APPLICATION_PATH=/Users/Geison/Documents/projects/personal/brasil_acessivel_app
 FLUTTER_TARGET=/Users/Geison/Documents/projects/personal/brasil_acessivel_app/lib/main.dart
-FLUTTER_BUILD_MODE=debug
 FLUTTER_BUILD_DIR=build
 SYMROOT=${SOURCE_ROOT}/../build/ios
 FLUTTER_FRAMEWORK_DIR=/Applications/flutter/bin/cache/artifacts/engine/ios
