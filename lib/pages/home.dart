@@ -35,7 +35,7 @@ class _HomePageState extends State<Home> {
             padding: EdgeInsets.only(right: 10.0),
             child: IconButton(
               icon: Icon(Icons.search),
-              onPressed: () { debugPrint('App Bar Search Button Clicked'); }
+              onPressed: () { showSearch(context: context, delegate: DataSearch()); }
             ),
           ),
           Padding(
@@ -68,4 +68,108 @@ class _HomePageState extends State<Home> {
       ),
     );
   }
+}
+
+class DataSearch extends SearchDelegate<String> {
+  final states = [
+    'Acre',
+    'Alagoas',
+    'Amapá',
+    'Amazonas',
+    'Bahia',
+    'Ceará',
+    'Distrito Federal',
+    'Espírito Santo',
+    'Goiás',
+    'Maranhão',
+    'Mato Grosso',
+    'Mato Grosso do Sul',
+    'Minas Gerais',
+    'Pará',
+    'Paraíba',
+    'Paraná',
+    'Pernambuco',
+    'Piauí',
+    'Rio de Janeiro',
+    'Rio Grande do Norte',
+    'Rio Grande do Sul',
+    'Rondônia',
+    'Roraima',
+    'Santa Catarina',
+    'São Paulo',
+    'Sergipe',
+    'Tocantins'
+  ];
+
+  final recentStates = ['Rio Grande do Sul', 'Santa Catarina', 'São Paulo'];
+
+  @override
+  List<Widget> buildActions(BuildContext context) {
+    return [IconButton(icon: Icon(Icons.clear), onPressed: (){ query = ''; })];
+  }
+
+  @override
+  Widget buildLeading(BuildContext context) {
+    return IconButton(
+      icon: AnimatedIcon(
+        icon: AnimatedIcons.menu_arrow,
+        progress: transitionAnimation),
+      onPressed: (){ close(context, null); });
+  }
+
+  @override
+  Widget buildResults(BuildContext context) {
+    return FlutterMap(
+      options: MapOptions(
+        center: LatLng(-30.0736512, -51.1202612),
+        zoom: 12.0,
+      ),
+      layers: [
+        TileLayerOptions(
+            urlTemplate:
+            "https://{s}.tile.openstreetmap.org/{z}/{x}/{y}.png",
+            subdomains: ['a', 'b', 'c'])
+      ],
+    );
+  }
+
+  @override
+  Widget buildSuggestions(BuildContext context) {
+    final suggestionsList = query.isEmpty
+      ? recentStates
+      : states.where((p) => p.toLowerCase().startsWith(query.toLowerCase())).toList();
+
+    return ListView.builder(
+      itemBuilder: (context, index) => ListTile(
+        onTap: (){ showResults(context); },
+        leading: Icon(Icons.map),
+        title: RichText(
+          text: TextSpan(
+            text: suggestionsList[index].substring(0, query.length),
+            style: TextStyle(color: Colors.black, fontWeight: FontWeight.bold),
+            children: [TextSpan(
+              text: suggestionsList[index].substring(query.length),
+              style: TextStyle(color: Colors.grey)
+            )]
+          ),
+        )),
+      itemCount: suggestionsList.length,
+    );
+  }
+
+  @override
+  ThemeData appBarTheme(BuildContext context) {
+    final ThemeData theme = Theme.of(context);
+    return theme.copyWith(
+      primaryColor: theme.primaryColor,
+      primaryIconTheme: theme.primaryIconTheme,
+      primaryColorBrightness: theme.primaryColorBrightness,
+      primaryTextTheme: theme.primaryTextTheme,
+      hintColor: Colors.white,
+      textTheme: theme.textTheme.copyWith(
+        title: theme.textTheme.title.copyWith(
+          color: theme.primaryTextTheme.title.color))
+    );
+ }
+
 }
