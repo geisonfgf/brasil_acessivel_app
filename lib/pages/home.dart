@@ -1,3 +1,4 @@
+import 'package:brasil_acessivel/layout/widgets/search_widget.dart';
 import 'package:brasil_acessivel/services/location_service.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_map/flutter_map.dart';
@@ -54,36 +55,28 @@ class _HomePageState extends State<Home> {
   @override
   Widget build(BuildContext context) {
     return Scaffold(
-      appBar: AppBar(
-        title: Text("Brasil Acessível"),
-        actions: <Widget>[
-          Padding(
-            padding: EdgeInsets.only(right: 10.0),
-            child: IconButton(
-              icon: Icon(Icons.account_circle),
-              onPressed: () { Navigator.of(context).pushNamed("/login"); }
-            ),
-          )
-        ],
-      ),
+      appBar: AppBar(title: Text("Brasil Acessível")),
       drawer: Drawer(
         child: ListView(
           children: <Widget>[
             Container(
-              child: Center(
-                child: Padding(
-                  padding: const EdgeInsets.all(20.0),
-                  child: IconButton(
-                    icon: Icon(Icons.account_circle),
-                    onPressed: () {Navigator.of(context).pushNamed("/login");},
-                    iconSize: 80.0,
-                  ),
-                ),
-              ),
+              child: UserAccountsDrawerHeader(
+                decoration: BoxDecoration(color: Colors.lime),
+                accountName: Text('Nome do usuário'),
+                accountEmail: Text('usuario@email.com'),
+                currentAccountPicture: CircleAvatar(
+                    backgroundColor: Colors.purple,
+                    child: Text("G"),
+                )
+              )
             ),
             ListTile(
               title: Text('Faça login'),
               trailing: new Icon(Icons.account_box),
+            ),
+            ListTile(
+              title: Text('Cadastre um novo local ou estabelecimento'),
+              trailing: new Icon(Icons.map),
             ),
             ListTile(
               title: Text('Contribua com o projeto'),
@@ -99,18 +92,6 @@ class _HomePageState extends State<Home> {
       ),
       body: Column(
         children: <Widget>[
-          Container(
-            child: Padding(
-              padding: const EdgeInsets.only(left:16.0, top: 7.0, bottom: 7.0),
-              child: TextField(
-                decoration: InputDecoration(
-                  border: InputBorder.none,
-                  hintText: 'Busque por lugares acessíveis...',
-                  icon: Icon(Icons.search)
-                ),
-              ),
-            ),
-          ),
           Container(
             child: Flexible(
               child: FlutterMap(
@@ -129,13 +110,7 @@ class _HomePageState extends State<Home> {
           )
         ],
       ),
-      floatingActionButton: Padding(
-        padding: const EdgeInsets.only(bottom: 10.0),
-        child: FloatingActionButton(
-          child: Icon(Icons.add),
-          onPressed: () { Navigator.of(context).pushNamed("/login"); },
-        ),
-      ),
+      floatingActionButton: SearchWidget()
     );
   }
 }
