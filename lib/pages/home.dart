@@ -71,11 +71,12 @@ class _HomePageState extends State<Home> {
               )
             ),
             ListTile(
-              title: Text('Faça login'),
+              title: Text('Efetuar login'),
               trailing: new Icon(Icons.account_box),
+              onTap: () { Navigator.of(context).pushNamed('/login'); }
             ),
             ListTile(
-              title: Text('Cadastre um novo local ou estabelecimento'),
+              title: Text('Cadastrar locais acessíveis'),
               trailing: new Icon(Icons.map),
             ),
             ListTile(
@@ -86,6 +87,7 @@ class _HomePageState extends State<Home> {
             ListTile(
               title: Text('Fechar menu'),
               trailing: new Icon(Icons.close),
+              onTap: () { Navigator.of(context).pop(); }
             )
           ],
         ),
