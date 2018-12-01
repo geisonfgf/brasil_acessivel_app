@@ -5,5 +5,3 @@ FLUTTER_TARGET=/Users/Geison/Documents/projects/personal/brasil_acessivel_app/li
 FLUTTER_BUILD_DIR=build
 SYMROOT=${SOURCE_ROOT}/../build/ios
 FLUTTER_FRAMEWORK_DIR=/Applications/flutter/bin/cache/artifacts/engine/ios
-FLUTTER_BUILD_NAME=1.0.0
-FLUTTER_BUILD_NUMBER=1

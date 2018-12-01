@@ -1,4 +1,5 @@
 import 'package:flutter/material.dart';
+import 'layout/theme.dart';
 import 'pages/home.dart';
 import 'pages/login.dart';
 
@@ -10,7 +11,7 @@ var routes = <String, WidgetBuilder>{
 void main() {
   runApp(
     MaterialApp(
-      theme: ThemeData(primaryColor: Colors.red, accentColor: Colors.redAccent),
+      theme: ThemeData(primarySwatch: Colors.purple),
       debugShowCheckedModeBanner: false,
       home: Home(),
       routes: routes

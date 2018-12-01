@@ -3,6 +3,7 @@
 //
 
 #import "GeneratedPluginRegistrant.h"
+#import <geocoder/GeocoderPlugin.h>
 #import <geolocator/GeolocatorPlugin.h>
 #import <google_api_availability/GoogleApiAvailabilityPlugin.h>
 #import <permission_handler/PermissionHandlerPlugin.h>
@@ -10,6 +11,7 @@
 @implementation GeneratedPluginRegistrant
 
 + (void)registerWithRegistry:(NSObject<FlutterPluginRegistry>*)registry {
+  [GeocoderPlugin registerWithRegistrar:[registry registrarForPlugin:@"GeocoderPlugin"]];
   [GeolocatorPlugin registerWithRegistrar:[registry registrarForPlugin:@"GeolocatorPlugin"]];
   [GoogleApiAvailabilityPlugin registerWithRegistrar:[registry registrarForPlugin:@"GoogleApiAvailabilityPlugin"]];
   [PermissionHandlerPlugin registerWithRegistrar:[registry registrarForPlugin:@"PermissionHandlerPlugin"]];
