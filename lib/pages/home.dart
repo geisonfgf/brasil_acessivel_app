@@ -58,6 +58,35 @@ class _HomePageState extends State<Home> {
     });
   }
 
+  Widget showMapOrLoading() {
+    if(isLoading) {
+      return Container(
+        alignment: Alignment.center,
+        child: CircularProgressIndicator(
+          valueColor: new AlwaysStoppedAnimation<Color>(Colors.purple)
+        )
+      );
+    } else {
+      return Container(
+        key: UniqueKey(),
+        child: Flexible(
+          child: FlutterMap(
+            options: MapOptions(
+              center: _mapPosition,
+              zoom: _mapZoom,
+            ),
+            layers: [
+              TileLayerOptions(
+                  urlTemplate:
+                  "https://{s}.tile.openstreetmap.org/{z}/{x}/{y}.png",
+                  subdomains: ['a', 'b', 'c'])
+            ],
+          )
+        )
+      );
+    }
+  }
+
   @override
   Widget build(BuildContext context) {
     return Scaffold(
@@ -100,24 +129,10 @@ class _HomePageState extends State<Home> {
         ),
       ),
       body: Column(
+        mainAxisAlignment: MainAxisAlignment.center,
+        crossAxisAlignment: CrossAxisAlignment.center,
         children: <Widget>[
-          Container(
-            key: UniqueKey(),
-            child: Flexible(
-              child: FlutterMap(
-                options: MapOptions(
-                  center: _mapPosition,
-                  zoom: _mapZoom,
-                ),
-                layers: [
-                  TileLayerOptions(
-                      urlTemplate:
-                      "https://{s}.tile.openstreetmap.org/{z}/{x}/{y}.png",
-                      subdomains: ['a', 'b', 'c'])
-                ],
-              )
-            )
-          )
+          showMapOrLoading()
         ],
       ),
       floatingActionButton: Container(
