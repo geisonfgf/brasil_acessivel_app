@@ -165,9 +165,10 @@ class _HomePageState extends State<Home> {
           showMapOrLoading()
         ],
       ),
+      floatingActionButtonLocation: FloatingActionButtonLocation.centerFloat,
       floatingActionButton: Container(
         alignment: Alignment.topCenter,
-        padding: EdgeInsets.only(left: 40.0, right: 10.0, top: 120.0),
+        padding: EdgeInsets.only(left: 30.0, right: 30.0, top: 60 + (MediaQuery.of(context).size.height * 0.08)),
         margin: const EdgeInsets.only(),
         child: Material(
           borderRadius: const BorderRadius.all(const Radius.circular(25.0)),
