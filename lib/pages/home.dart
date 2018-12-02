@@ -1,4 +1,3 @@
-import 'package:brasil_acessivel/layout/widgets/search_widget.dart';
 import 'package:brasil_acessivel/services/location_service.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_map/flutter_map.dart';
@@ -12,30 +11,36 @@ class Home extends StatefulWidget {
 
 class _HomePageState extends State<Home> {
 
-  var mapPosition = LocationService.brazilLocation;
+  final TextEditingController editingController = TextEditingController();
+
+  var _mapPosition = LocationService.brazilLocation;
+  var _mapZoom = 4.0;
 
   List<Address> results = [];
 
   bool isLoading = false;
 
-  Future search() async {
+  Future search(String query) async {
 
-    this.setState(() {
-      this.isLoading = true;
+    setState(() {
+      isLoading = true;
     });
 
     try{
-      var results = await Geocoder.local.findAddressesFromQuery("Porto Alegre RS");
-      this.setState(() {
-        this.results = results;
+      var results = await Geocoder.local.findAddressesFromQuery(query);
+      setState(() {
+        results = results;
+        _mapZoom = 13.0;
+        _mapPosition = LatLng(
+          results.first.coordinates.latitude, results.first.coordinates.longitude
+        );
+        isLoading = false;
       });
-    }
-    catch(e) {
+    } catch(e) {
       print("Error occured: $e");
-    }
-    finally {
-      this.setState(() {
-        this.isLoading = false;
+    } finally {
+      setState(() {
+        isLoading = false;
       });
     }
   }
@@ -46,8 +51,9 @@ class _HomePageState extends State<Home> {
     LocationService.getGPSPosition().then((position) {
       if(position == null) { return; }
 
-      this.setState((){
-        mapPosition = LatLng(position.latitude, position.longitude);
+      setState((){
+        _mapPosition = LatLng(position.latitude, position.longitude);
+        _mapZoom = 13.0;
       });
     });
   }
@@ -95,11 +101,12 @@ class _HomePageState extends State<Home> {
       body: Column(
         children: <Widget>[
           Container(
+            key: UniqueKey(),
             child: Flexible(
               child: FlutterMap(
                 options: MapOptions(
-                  center: mapPosition,
-                  zoom: 4.0,
+                  center: _mapPosition,
+                  zoom: _mapZoom,
                 ),
                 layers: [
                   TileLayerOptions(
@@ -112,7 +119,41 @@ class _HomePageState extends State<Home> {
           )
         ],
       ),
-      floatingActionButton: SearchWidget()
+      floatingActionButton: Container(
+        alignment: Alignment.topCenter,
+        padding: EdgeInsets.only(left: 40.0, right: 10.0, top: 140.0),
+        margin: const EdgeInsets.only(),
+        child: Material(
+          borderRadius: const BorderRadius.all(const Radius.circular(25.0)),
+          elevation: 2.0,
+          child: Container(
+            height: 45.0,
+            margin: EdgeInsets.only(left: 15.0,right: 15.0),
+            child: Row(
+              crossAxisAlignment: CrossAxisAlignment.center,
+              children: <Widget>[
+                Expanded(
+                    child: TextField(
+                      maxLines: 1,
+                      decoration: InputDecoration(
+                        icon: const Icon(Icons.search, color: Colors.purple),
+                        hintText: "Busque em outro local",
+                        border: InputBorder.none
+                      ),
+                      onSubmitted: searchPlaces,
+                      controller: editingController,
+                    )
+                ),
+                Icon(Icons.mic, color: Colors.purple)
+              ],
+            ),
+          ),
+        ),
+      )
     );
+  }
+
+  void searchPlaces(query){
+    search(query);
   }
 }
