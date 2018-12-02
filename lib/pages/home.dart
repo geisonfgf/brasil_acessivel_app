@@ -61,6 +61,7 @@ class _HomePageState extends State<Home> {
   @override
   Widget build(BuildContext context) {
     return Scaffold(
+      resizeToAvoidBottomPadding: false,
       appBar: AppBar(title: Text("Brasil Acessível")),
       drawer: Drawer(
         child: ListView(
@@ -121,7 +122,7 @@ class _HomePageState extends State<Home> {
       ),
       floatingActionButton: Container(
         alignment: Alignment.topCenter,
-        padding: EdgeInsets.only(left: 40.0, right: 10.0, top: 140.0),
+        padding: EdgeInsets.only(left: 40.0, right: 10.0, top: 120.0),
         margin: const EdgeInsets.only(),
         child: Material(
           borderRadius: const BorderRadius.all(const Radius.circular(25.0)),
