@@ -3,11 +3,6 @@ import 'pages/home.dart';
 import 'pages/login.dart';
 
 void main() {
-  final _routes = <String, WidgetBuilder>{
-    "/home": (BuildContext context) => Home(),
-    "/login": (BuildContext context) => Login(),
-  };
-
   runApp(
     MaterialApp(
       theme: ThemeData(
@@ -20,7 +15,6 @@ void main() {
       ),
       debugShowCheckedModeBanner: false,
       home: Home(),
-      routes: _routes
     )
   );
 }

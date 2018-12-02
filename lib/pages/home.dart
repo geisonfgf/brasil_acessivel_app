@@ -1,3 +1,4 @@
+import 'package:brasil_acessivel/pages/signin.dart';
 import 'package:brasil_acessivel/services/location_service.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_map/flutter_map.dart';
@@ -12,18 +13,19 @@ class Home extends StatefulWidget {
 class _HomePageState extends State<Home> {
 
   final TextEditingController editingController = TextEditingController();
+  GlobalKey<ScaffoldState> _scaffoldKey = GlobalKey<ScaffoldState>();
 
   var _mapPosition = LocationService.brazilLocation;
   var _mapZoom = 4.0;
 
   List<Address> results = [];
 
-  bool isLoading = false;
+  bool _isLoading = false;
 
   Future search(String query) async {
 
     setState(() {
-      isLoading = true;
+      _isLoading = true;
     });
 
     try{
@@ -34,15 +36,36 @@ class _HomePageState extends State<Home> {
         _mapPosition = LatLng(
           results.first.coordinates.latitude, results.first.coordinates.longitude
         );
-        isLoading = false;
+        _isLoading = false;
       });
     } catch(e) {
-      print("Error occured: $e");
+      _showErrorMessage();
     } finally {
       setState(() {
-        isLoading = false;
+        _isLoading = false;
       });
     }
+  }
+
+  _showErrorMessage() {
+    final snackBar = SnackBar(
+      content: Row(
+        children: <Widget>[
+          Padding(
+            padding: const EdgeInsets.only(left: 5.0, right: 5.0),
+            child: Icon(Icons.error),
+          ),
+          Text(
+            'Endereço não encontrado',
+            style: TextStyle(fontWeight: FontWeight.bold, fontSize: 18.0)
+          ),
+        ],
+      ),
+      duration: Duration(seconds: 3),
+      backgroundColor: Colors.purple,
+    );
+
+    _scaffoldKey.currentState.showSnackBar(snackBar);
   }
 
   @override
@@ -59,7 +82,7 @@ class _HomePageState extends State<Home> {
   }
 
   Widget showMapOrLoading() {
-    if(isLoading) {
+    if(_isLoading) {
       return Container(
         alignment: Alignment.center,
         child: CircularProgressIndicator(
@@ -90,6 +113,7 @@ class _HomePageState extends State<Home> {
   @override
   Widget build(BuildContext context) {
     return Scaffold(
+      key: _scaffoldKey,
       resizeToAvoidBottomPadding: false,
       appBar: AppBar(title: Text("Brasil Acessível")),
       drawer: Drawer(
@@ -109,7 +133,13 @@ class _HomePageState extends State<Home> {
             ListTile(
               title: Text('Efetuar login'),
               trailing: new Icon(Icons.account_box),
-              onTap: () { Navigator.of(context).pushNamed('/login'); }
+              onTap: () {
+                Navigator.push(
+                  context, MaterialPageRoute(
+                    builder: (context) => SignIn()
+                  )
+                );
+              }
             ),
             ListTile(
               title: Text('Cadastrar locais acessíveis'),
