@@ -1,6 +1,5 @@
 import 'package:flutter/material.dart';
 import 'pages/home.dart';
-import 'pages/login.dart';
 
 void main() {
   runApp(
@@ -9,7 +8,7 @@ void main() {
         fontFamily: 'Ruboto',
         primaryColor: Colors.white,
         primaryTextTheme: TextTheme(
-          title: TextStyle(color: Colors.cyan)
+            title: TextStyle(color: Colors.cyan)
         ),
         primaryIconTheme: IconThemeData(color: Colors.purple)
       ),

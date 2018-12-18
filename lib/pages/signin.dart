@@ -17,49 +17,49 @@ class _LoginPageState extends State<SignIn> {
     return new Scaffold(
       appBar: new AppBar(title: Text('Cadastre-se')),
       body: Form(
-        key: _formKey,
-        child: Column(
-          children: <Widget>[
-            TextFormField(
-              validator: (input) {
-                if(input.isEmpty){
-                  return 'Informe seu nome';
-                }
-              },
-              decoration: InputDecoration(
-                labelText: 'Nome'
+          key: _formKey,
+          child: Column(
+            children: <Widget>[
+              TextFormField(
+                validator: (input) {
+                  if(input.isEmpty){
+                    return 'Informe seu nome';
+                  }
+                },
+                decoration: InputDecoration(
+                    labelText: 'Nome'
+                ),
+                onSaved: (input) => _name = input,
               ),
-              onSaved: (input) => _name = input,
-            ),
-            TextFormField(
-              validator: (input) {
-                if(input.isEmpty){
-                  return 'Informe seu email';
-                }
-              },
-              decoration: InputDecoration(
-                labelText: 'Email'
+              TextFormField(
+                validator: (input) {
+                  if(input.isEmpty){
+                    return 'Informe seu email';
+                  }
+                },
+                decoration: InputDecoration(
+                    labelText: 'Email'
+                ),
+                onSaved: (input) => _email = input,
               ),
-              onSaved: (input) => _email = input,
-            ),
-            TextFormField(
-              validator: (input) {
-                if(input.length < 6){
-                  return 'Informe uma senha com mais de 6 caracteres';
-                }
-              },
-              decoration: InputDecoration(
-                labelText: 'Senha'
+              TextFormField(
+                validator: (input) {
+                  if(input.length < 6){
+                    return 'Informe uma senha com mais de 6 caracteres';
+                  }
+                },
+                decoration: InputDecoration(
+                    labelText: 'Senha'
+                ),
+                onSaved: (input) => _password = input,
+                obscureText: true,
               ),
-              onSaved: (input) => _password = input,
-              obscureText: true,
-            ),
-            RaisedButton(
-              onPressed: signIn,
-              child: Text('Efetuar Login'),
-            ),
-          ],
-        )
+              RaisedButton(
+                onPressed: signIn,
+                child: Text('Efetuar Login'),
+              ),
+            ],
+          )
       ),
     );
   }

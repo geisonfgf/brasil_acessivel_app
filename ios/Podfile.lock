@@ -2,11 +2,19 @@ PODS:
   - Flutter (1.0.0)
   - geocoder (0.0.1):
     - Flutter
-  - geolocator (2.1.0):
+  - geolocator (2.1.1):
     - Flutter
   - google_api_availability (1.0.4):
     - Flutter
-  - permission_handler (2.1.0):
+  - google_maps_flutter (0.0.1):
+    - Flutter
+    - GoogleMaps
+  - GoogleMaps (2.7.0):
+    - GoogleMaps/Maps (= 2.7.0)
+  - GoogleMaps/Base (2.7.0)
+  - GoogleMaps/Maps (2.7.0):
+    - GoogleMaps/Base
+  - permission_handler (2.1.2):
     - Flutter
 
 DEPENDENCIES:
@@ -14,7 +22,12 @@ DEPENDENCIES:
   - geocoder (from `.symlinks/plugins/geocoder/ios`)
   - geolocator (from `.symlinks/plugins/geolocator/ios`)
   - google_api_availability (from `.symlinks/plugins/google_api_availability/ios`)
+  - google_maps_flutter (from `.symlinks/plugins/google_maps_flutter/ios`)
   - permission_handler (from `.symlinks/plugins/permission_handler/ios`)
+
+SPEC REPOS:
+  https://github.com/cocoapods/specs.git:
+    - GoogleMaps
 
 EXTERNAL SOURCES:
   Flutter:
@@ -25,16 +38,20 @@ EXTERNAL SOURCES:
     :path: ".symlinks/plugins/geolocator/ios"
   google_api_availability:
     :path: ".symlinks/plugins/google_api_availability/ios"
+  google_maps_flutter:
+    :path: ".symlinks/plugins/google_maps_flutter/ios"
   permission_handler:
     :path: ".symlinks/plugins/permission_handler/ios"
 
 SPEC CHECKSUMS:
-  Flutter: 9d0fac939486c9aba2809b7982dfdbb47a7b0296
-  geocoder: 333b5c474623c8223f367b6ac4846b5f9ea72e85
-  geolocator: 4adbfa4f25078e702f9b790bb49e4ff52158df6d
-  google_api_availability: b19830d6be60d6b92dce5fc5b9137c31b04afbf1
-  permission_handler: ffc5769b295893830703e8a5b9101e47e12da6af
+  Flutter: 58dd7d1b27887414a370fcccb9e645c08ffd7a6a
+  geocoder: 3cfab70531a0b367e917bafe82df4c30f6d4c45a
+  geolocator: 7392f34656e08f19d339e8bee0a06877131606bd
+  google_api_availability: f167b87f789fc6f43a2d43d4474c30e97f79ca46
+  google_maps_flutter: 924970f41ec509a201b593548db005efb2a09ee9
+  GoogleMaps: f79af95cb24d869457b1f961c93d3ce8b2f3b848
+  permission_handler: b41574245a2a3f2e17f1f48b5fbe6100a151f0e1
 
-PODFILE CHECKSUM: 670df5061a01e02b053c0b8f65f536cf2ff1342e
+PODFILE CHECKSUM: 237ff1fe51a5d6919997051a37f9f598647d7092
 
-COCOAPODS: 1.5.3
+COCOAPODS: 1.6.0.beta.2

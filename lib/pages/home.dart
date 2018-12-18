@@ -1,9 +1,8 @@
-import 'package:brasil_acessivel/pages/signin.dart';
-import 'package:brasil_acessivel/services/location_service.dart';
 import 'package:flutter/material.dart';
-import 'package:flutter_map/flutter_map.dart';
-import 'package:latlong/latlong.dart';
+import 'package:geolocator/geolocator.dart';
 import 'package:geocoder/geocoder.dart';
+import 'package:google_maps_flutter/google_maps_flutter.dart';
+import 'package:brasil_acessivel_flutter/widgets/hamburguer_menu.dart';
 
 class Home extends StatefulWidget {
   @override
@@ -12,37 +11,33 @@ class Home extends StatefulWidget {
 
 class _HomePageState extends State<Home> {
 
-  final TextEditingController editingController = TextEditingController();
   GlobalKey<ScaffoldState> _scaffoldKey = GlobalKey<ScaffoldState>();
-
-  var _mapPosition = LocationService.brazilLocation;
+  final TextEditingController _editingController = TextEditingController();
+  GoogleMapController _mapController;
+  bool _mapToogle = false;
+  LatLng _mapPosition = LatLng(-22.34, -48.05);
   var _mapZoom = 4.0;
 
-  List<Address> results = [];
-
-  bool _isLoading = false;
-
-  Future search(String query) async {
+  Future _search(String query) async {
 
     setState(() {
-      _isLoading = true;
+      _mapToogle = false;
     });
 
     try{
       var results = await Geocoder.local.findAddressesFromQuery(query);
       setState(() {
-        results = results;
         _mapZoom = 13.0;
         _mapPosition = LatLng(
-          results.first.coordinates.latitude, results.first.coordinates.longitude
+            results.first.coordinates.latitude, results.first.coordinates.longitude
         );
-        _isLoading = false;
+        _mapToogle = true;
       });
     } catch(e) {
       _showErrorMessage();
     } finally {
       setState(() {
-        _isLoading = false;
+        _mapToogle = true;
       });
     }
   }
@@ -56,8 +51,8 @@ class _HomePageState extends State<Home> {
             child: Icon(Icons.error),
           ),
           Text(
-            'Endereço não encontrado',
-            style: TextStyle(fontWeight: FontWeight.bold, fontSize: 18.0)
+              'Endereço não encontrado',
+              style: TextStyle(fontWeight: FontWeight.bold, fontSize: 18.0)
           ),
         ],
       ),
@@ -68,139 +63,88 @@ class _HomePageState extends State<Home> {
     _scaffoldKey.currentState.showSnackBar(snackBar);
   }
 
-  @override
-  void initState() {
-    super.initState();
-    LocationService.getGPSPosition().then((position) {
-      if(position == null) { return; }
-
-      setState((){
-        _mapPosition = LatLng(position.latitude, position.longitude);
-        _mapZoom = 13.0;
-      });
+  void onMapCreated(GoogleMapController controller) {
+    setState(() {
+      _mapController = controller;
     });
   }
 
-  Widget showMapOrLoading() {
-    if(_isLoading) {
-      return Container(
-        alignment: Alignment.center,
-        child: CircularProgressIndicator(
-          valueColor: new AlwaysStoppedAnimation<Color>(Colors.purple)
-        )
-      );
-    } else {
-      return Container(
-        key: UniqueKey(),
-        child: Flexible(
-          child: FlutterMap(
-            options: MapOptions(
-              center: _mapPosition,
-              zoom: _mapZoom,
-            ),
-            layers: [
-              TileLayerOptions(
-                  urlTemplate:
-                  "https://{s}.tile.openstreetmap.org/{z}/{x}/{y}.png",
-                  subdomains: ['a', 'b', 'c'])
-            ],
-          )
-        )
-      );
-    }
+  void initState() {
+    super.initState();
+    Geolocator().getCurrentPosition().then((currentLocation) {
+      if(currentLocation == null) { return; }
+
+      setState(() {
+        _mapPosition = LatLng(
+          currentLocation.latitude,
+          currentLocation.longitude
+        );
+        _mapZoom = 13.0;
+        _mapToogle = true;
+      });
+    });
   }
 
   @override
   Widget build(BuildContext context) {
     return Scaffold(
       key: _scaffoldKey,
-      resizeToAvoidBottomPadding: false,
       appBar: AppBar(title: Text("Brasil Acessível")),
-      drawer: Drawer(
-        child: ListView(
-          children: <Widget>[
-            Container(
-              child: UserAccountsDrawerHeader(
-                decoration: BoxDecoration(color: Colors.lime),
-                accountName: Text('Nome do usuário'),
-                accountEmail: Text('usuario@email.com'),
-                currentAccountPicture: CircleAvatar(
-                    backgroundColor: Colors.purple,
-                    child: Text("G"),
-                )
-              )
-            ),
-            ListTile(
-              title: Text('Efetuar login'),
-              trailing: new Icon(Icons.account_box),
-              onTap: () {
-                Navigator.push(
-                  context, MaterialPageRoute(
-                    builder: (context) => SignIn()
-                  )
-                );
-              }
-            ),
-            ListTile(
-              title: Text('Cadastrar locais acessíveis'),
-              trailing: new Icon(Icons.map),
-            ),
-            ListTile(
-              title: Text('Contribua com o projeto'),
-              trailing: new Icon(Icons.attach_money),
-            ),
-            Divider(),
-            ListTile(
-              title: Text('Fechar menu'),
-              trailing: new Icon(Icons.close),
-              onTap: () { Navigator.of(context).pop(); }
-            )
-          ],
-        ),
-      ),
-      body: Column(
-        mainAxisAlignment: MainAxisAlignment.center,
-        crossAxisAlignment: CrossAxisAlignment.center,
+      drawer: HamburguerMenu(),
+      body: Stack(
         children: <Widget>[
-          showMapOrLoading()
-        ],
-      ),
-      floatingActionButtonLocation: FloatingActionButtonLocation.centerFloat,
-      floatingActionButton: Container(
-        alignment: Alignment.topCenter,
-        padding: EdgeInsets.only(left: 30.0, right: 30.0, top: 60 + (MediaQuery.of(context).size.height * 0.08)),
-        margin: const EdgeInsets.only(),
-        child: Material(
-          borderRadius: const BorderRadius.all(const Radius.circular(25.0)),
-          elevation: 2.0,
-          child: Container(
-            height: 45.0,
-            margin: EdgeInsets.only(left: 15.0,right: 15.0),
-            child: Row(
-              crossAxisAlignment: CrossAxisAlignment.center,
-              children: <Widget>[
-                Expanded(
-                    child: TextField(
-                      maxLines: 1,
-                      decoration: InputDecoration(
-                        icon: const Icon(Icons.search, color: Colors.purple),
-                        hintText: "Busque em outro local",
-                        border: InputBorder.none
-                      ),
-                      onSubmitted: searchPlaces,
-                      controller: editingController,
+          Positioned.fill(
+              child: _mapToogle ?
+              GoogleMap(
+                onMapCreated: onMapCreated,
+                options: GoogleMapOptions(
+                    cameraPosition: CameraPosition(
+                        target: _mapPosition,
+                        zoom: _mapZoom
                     )
                 ),
-                Icon(Icons.mic, color: Colors.purple)
-              ],
-            ),
+              ):
+              Center(
+                child: CircularProgressIndicator(
+                    valueColor: AlwaysStoppedAnimation<Color>(
+                        Colors.purple
+                    )
+                ),
+              )
           ),
-        ),
+          Container(
+            alignment: Alignment.topCenter,
+            padding: EdgeInsets.only(left: 10.0, right: 10.0, top: 10),
+            margin: const EdgeInsets.only(),
+            child: Material(
+              borderRadius: const BorderRadius.all(const Radius.circular(6.0)),
+              elevation: 2.0,
+              child: Container(
+                height: 45.0,
+                margin: EdgeInsets.only(left: 10.0,right: 10.0),
+                child: Row(
+                  crossAxisAlignment: CrossAxisAlignment.center,
+                  children: <Widget>[
+                    Expanded(
+                        child: TextField(
+                          maxLines: 1,
+                          decoration: InputDecoration(
+                              icon: const Icon(Icons.search, color: Colors.purple),
+                              hintText: "Busque em outro local",
+                              border: InputBorder.none
+                          ),
+                          onSubmitted: _search,
+                          controller: _editingController,
+                        )
+                    ),
+                    Icon(Icons.mic, color: Colors.purple)
+                  ],
+                ),
+              ),
+            ),
+          )
+        ],
       )
     );
-  }
-
-  void searchPlaces(query){
-    search(query);
   }
 }
